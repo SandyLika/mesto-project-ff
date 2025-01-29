@@ -1,8 +1,7 @@
 // Темплейт?? карточки
 
 const cardTemplate = document.querySelector('#card-template').content;
-const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
-const addButton= document.querySelector('.profile__add-butto');
+const cardsContainer= document.querySelector('.places__list');
 //  DOM узлы
 
 initialCards.forEach((el) => {    
@@ -12,8 +11,9 @@ initialCards.forEach((el) => {
 //  Функция создания карточки
 
 function createCard (card, openCB) { //CB-CallBack
-  const cardImage = cardElement.querySelector('.card__image');
-  const cardTitle = cardElement.querySelector('.card__title');
+  const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
+  const cardImage = cardItem.querySelector('.card__image');
+  const cardTitle = cardItem.querySelector('.card__title');
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
@@ -29,6 +29,3 @@ function delCard (card) {
 }
 
 // @todo: Вывести карточки на страницу
-addButton.addEventListener('click', function () {
-  createCard(card,openCB)
-});
