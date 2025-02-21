@@ -7,16 +7,16 @@ export function closePopup (popup, handleckickEsc) {
   document.removeEventListener('keydown', handleckickEsc);    
 }
 
-export function handleckickEsc (event) {
+export function closePopupByEsc (event) {
   if (event.key === 'Escape') {
-    let popOpen = document.querySelector('.popup_is-opened');
+    const popOpen = document.querySelector('.popup_is-opened');
     if (popOpen) {
       closePop()
     }
   }
 }
 
-export function handleClickOverlay(evt) {
+export function closePopupByOverlay(evt) {
   const popIsOpen = evt.target.closest(".popup");
 
   if (

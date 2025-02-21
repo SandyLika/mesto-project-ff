@@ -1,7 +1,7 @@
 import './pages/index.css';
 import {initialCards} from "./cards.js";
 import { createCard, deleteCard, likeCard } from "./components/card.js";
-import { openPopup, closePopup, handleClickOverlay,handleckickEsc } from "./components/modal.js";
+import { openPopup, closePopup, closePopupByOverlay,closePopupByEsc } from "./components/modal.js";
 
 //const cardTemplate = document.querySelector('#card-template').content;
 const cardsContainer= document.querySelector('.places__list');
@@ -10,12 +10,19 @@ initialCards.forEach((el) => {
   cardsContainer.append(createCard(el, deleteCard,likeCard,handleclickImage));
 });
 
-const popupConteiner = document.querySelectorAll('.popup');
+const popupsConteiner = document.querySelectorAll('.popup');
 
-popupConteiner.forEach(function(el) {
+popupsConteiner.forEach(function(el) {
     el.classList.add("popup_is-animated");
-  });
+});
 
+popupsConteiner.forEach(function (el) {
+  el.addEventListener("click", closePopupByOverlay);
+});
+
+popupsConteiner.forEach(function (el) {
+  el.addEventListener("click", closePopupByEsc);
+});
 
 const profileEditButton = document.querySelector(".profile__edit-button");//Кнопка редактирования профиля
 const addNewCardButton = document.querySelector(".profile__add-button");//кнопка создания новой карточки
@@ -33,21 +40,23 @@ const nameInputValue = nameInput.value;
 
 //обработчик клика кнопки для ред. профиля :)
 profileEditButton.addEventListener("click", () => {
-  openPopup(profileEditPopup, handleckickEsc);
+  openPopup(profileEditPopup, closePopupByEsc);
   }
 );
 
 //отправка формы + обработчик отправики
-function profileFormSubmit(evt) {
+function sudmitProfileForm(evt) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   
   profileTitle.textContent = nameInputValue;
   profileDescr.textContent = descrInputValue;
 
+  formEditProfile.reset();
+
   closePopup(profileEditPopup);//закпыть поп
 }
 
-formEditProfile.addEventListener('submit', profileFormSubmit);
+formEditProfile.addEventListener('submit', sudmitProfileForm);
 
 //все для создания новой карточки
 const formAddNewCard = document.querySelector(".form__add-card");
@@ -60,7 +69,7 @@ addNewCardButton.addEventListener("click", () =>
 );
 
 //отправка формы + обработчик отправики
-function addNewCardFormSubmit(evt) {
+function submitAddNewCardForm(evt) {
   evt.preventDefault();  
 
   const newCardObj = {
@@ -81,7 +90,7 @@ function addNewCardFormSubmit(evt) {
   closePopup(addNewCardPopup);
 }
 
-formAddNewCard.addEventListener('submit', addNewCardFormSubmit);
+formAddNewCard.addEventListener('submit', submitAddNewCardForm);
 
 //переменные для поп с картинкой
 const imagePopup = document.querySelector(".popup_type_image");//поп сс картинкой
@@ -90,9 +99,9 @@ const popImage = imagePopup.querySelector(".popup__image");//картинка
 //клик по картинке
 function handleclickImage(evt) {
   openPopup(imagePopup);
-  const captionPopupImage = imagePopup.querySelector(".popup__caption");
-  const titleImage =document.querySelector('.card__title').textContent;
+  const parent = evt.target.closest(".places__item");//находим родителя элемента на который нажали
+  const titleImage =parent.querySelector('.card__title').textContent;// у родителя смотрим тайтл
   popImage.src = evt.target.src;
   popImage.alt = titleImage;
-  captionPopupImage.textContent=  titleImage;
+  imagePopup.querySelector(".popup__caption").textContent= titleImage;
   }
