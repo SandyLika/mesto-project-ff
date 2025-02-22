@@ -11,7 +11,7 @@ export function closePopupByEsc (event) {
   if (event.key === 'Escape') {
     const popOpen = document.querySelector('.popup_is-opened');
     if (popOpen) {
-      closePop()
+      closePopup()
     }
   }
 }

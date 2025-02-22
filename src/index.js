@@ -10,17 +10,17 @@ initialCards.forEach((el) => {
   cardsContainer.append(createCard(el, deleteCard,likeCard,handleclickImage));
 });
 
-const popupsConteiner = document.querySelectorAll('.popup');
+const popupConteiners = document.querySelectorAll('.popup');
 
-popupsConteiner.forEach(function(el) {
+popupsConteiners.forEach(function(el) {
     el.classList.add("popup_is-animated");
 });
 
-popupsConteiner.forEach(function (el) {
+popupConteiners.forEach(function (el) {
   el.addEventListener("click", closePopupByOverlay);
 });
 
-popupsConteiner.forEach(function (el) {
+popupConteiners.forEach(function (el) {
   el.addEventListener("click", closePopupByEsc);
 });
 
@@ -77,11 +77,7 @@ function submitAddNewCardForm(evt) {
     link: linkInput.value,
   };
   cardsContainer.prepend(
-    createCard(
-      newCardObj,
-      deleteCard,
-      likeCard,
-      handleclickImage
+    createCard(newCardObj,deleteCard,likeCard,handleclickImage
     )
   );
 
@@ -95,7 +91,7 @@ formAddNewCard.addEventListener('submit', submitAddNewCardForm);
 //переменные для поп с картинкой
 const imagePopup = document.querySelector(".popup_type_image");//поп сс картинкой
 const popImage = imagePopup.querySelector(".popup__image");//картинка
-
+const caption = imagePopup.querySelector(".popup__caption");
 //клик по картинке
 function handleclickImage(evt) {
   openPopup(imagePopup);
@@ -103,5 +99,5 @@ function handleclickImage(evt) {
   const titleImage =parent.querySelector('.card__title').textContent;// у родителя смотрим тайтл
   popImage.src = evt.target.src;
   popImage.alt = titleImage;
-  imagePopup.querySelector(".popup__caption").textContent= titleImage;
+  caption.textContent= titleImage;
   }
