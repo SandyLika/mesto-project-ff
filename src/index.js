@@ -12,7 +12,7 @@ initialCards.forEach((el) => {
 
 const popupConteiners = document.querySelectorAll('.popup');
 
-popupsConteiners.forEach(function(el) {
+popupConteiners.forEach(function(el) {
     el.classList.add("popup_is-animated");
 });
 
