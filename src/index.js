@@ -53,7 +53,7 @@ function sudmitProfileForm(evt) {
 
   formEditProfile.reset();
 
-  closePopup(profileEditPopup);//закпыть поп
+  closePopup(profileEditPopup, closePopupByEsc);//закпыть поп
 }
 
 formEditProfile.addEventListener('submit', sudmitProfileForm);
@@ -65,7 +65,7 @@ const linkInput = formAddNewCard.querySelector(".popup__input_type_url");
 
 // обработчик клика для созд. новой карточки :)
 addNewCardButton.addEventListener("click", () =>
-  openPopup(addNewCardPopup)
+  openPopup(addNewCardPopup, closePopupByEsc)
 );
 
 //отправка формы + обработчик отправики
@@ -83,7 +83,7 @@ function submitAddNewCardForm(evt) {
 
   formAddNewCard.reset();//сброс значений из формы
 
-  closePopup(addNewCardPopup);
+  closePopup(addNewCardPopup, closePopupByEsc);
 }
 
 formAddNewCard.addEventListener('submit', submitAddNewCardForm);
@@ -94,7 +94,7 @@ const popImage = imagePopup.querySelector(".popup__image");//картинка
 const caption = imagePopup.querySelector(".popup__caption");
 //клик по картинке
 function handleclickImage(evt) {
-  openPopup(imagePopup);
+  openPopup(imagePopup, closePopupByEsc);
   const parent = evt.target.closest(".places__item");//находим родителя элемента на который нажали
   const titleImage =parent.querySelector('.card__title').textContent;// у родителя смотрим тайтл
   popImage.src = evt.target.src;

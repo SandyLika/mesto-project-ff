@@ -1,17 +1,17 @@
-export function openPopup (popup, handleckickEsc) {
+export function openPopup (popup, closePopupByEsc) {
   popup.classList.add('popup_is-opened'); 
-  document.addEventListener('keydown', handleckickEsc);    
+  document.addEventListener('keydown', closePopupByEsc);    
 }
-export function closePopup (popup, handleckickEsc) {
+export function closePopup (popup, closePopupByEsc) {
   popup.classList.remove('popup_is-opened'); 
-  document.removeEventListener('keydown', handleckickEsc);    
+  document.removeEventListener('keydown', closePopupByEsc);    
 }
 
 export function closePopupByEsc (event) {
   if (event.key === 'Escape') {
     const popOpen = document.querySelector('.popup_is-opened');
     if (popOpen) {
-      closePopup()
+      closePopup(popOpen, closePopupByEsc)
     }
   }
 }
@@ -23,6 +23,6 @@ export function closePopupByOverlay(evt) {
     popIsOpen &&
     (evt.target === popIsOpen || evt.target.closest(".popup__close"))
   ) {
-    closePopup(popIsOpen);       
+    closePopup(popIsOpen, closePopupByEsc);       
   }
 }
