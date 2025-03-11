@@ -1,10 +1,20 @@
 import './pages/index.css';
 import {initialCards} from "./cards.js";
-import { createCard, deleteCard, likeCard } from "./components/card.js";
+import { createCard, likeCard } from "./components/card.js";
 import { openPopup, closePopup, closePopupByOverlay,closePopupByEsc } from "./components/modal.js";
-
+import {enableValidation, clearError} from "./validation.js";
+import {getProfile,editProfile,addNewCard,removeCard,likeCardA,unlikeCardA,editProfileAvatar} from "./api.js";
 //const cardTemplate = document.querySelector('#card-template').content;
 const cardsContainer= document.querySelector('.places__list');
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: ".popup__button_disabled",
+  inputErrorClass: ".popup__input_type_error",
+  errorClass: ".popup__error_visible"
+}
 
 initialCards.forEach((el) => {    
   cardsContainer.append(createCard(el, deleteCard,likeCard,handleclickImage));
@@ -63,6 +73,29 @@ const formAddNewCard = document.querySelector(".form__add-card");
 const nameCardInput = formAddNewCard.querySelector(".popup__input_type_card-name");
 const linkInput = formAddNewCard.querySelector(".popup__input_type_url");
 
+//все для удаления карточки
+const deleteCardPopup = document.querySelector('.popup_type_delete-card');
+const formDeleteCard= document.querySelector('.form__delete-card');
+const yesDeleteButton = deleteCardPopup.querySelector('.popup__button');
+
+//удаляем карточку
+function deleteCard (card, cardElement) {
+  openPopup(deleteCardPopup, closePopupByEsc)
+  yesDeleteButton.addEventListener("click",()=>
+  removeCard(card._id)
+  .then((res) => {
+    cardElement.remove();
+    closePopup(deleteCardPopup)
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+)
+}
+formDeleteCard.addEventListener("submit", deleteCard)
+
+
+//лайк карточки))
 // обработчик клика для созд. новой карточки :)
 addNewCardButton.addEventListener("click", () =>
   openPopup(addNewCardPopup, closePopupByEsc)
@@ -101,3 +134,45 @@ function handleclickImage(evt) {
   popImage.alt = titleImage;
   caption.textContent= titleImage;
   }
+
+enableValidation(validationConfig);
+
+//все для попапа изменения аватара
+const newAvatarPopup = document.querySelector(".popup_type_new-avatar");
+const formEditAvatar = document.querySelector(".form__new-avatar");
+const linkAvatarImput = formEditAvatar.querySelector(".popup__input_type_new-avatar");
+const addNewAvatarButton = document.querySelector(".profile__avatar__edit-button");
+const submitNewAvatarButton = formEditAvatar.querySelector(".popup__button");
+
+addNewAvatarButton.addEventListener("click", () => {
+  openPopup(newAvatarPopup, closePopupByEsc);
+});
+
+function submitAddNewAvatar (evt) {
+  evt.preventDefault();
+  const link = linkAvatarImput.value;
+  submitNewAvatarButton.textContent = "Сохранение...";
+  
+  editProfileAvatar(link)
+  .then((res) => {
+    data.avatar.style.backgroundImage = `url(${res.avatar})`
+    closePopup(newAvatarPopup);
+    formEditAvatar.reset();
+    clearError(formEditAvatar, validationConfig);
+    updateProfile(res);
+  })
+  .catch((err) => {
+    console.log(err);//куда блин выводить ошибки
+  })
+  .finally(() => {
+    data.avatarConfirmBtn.textContent = 'Обновить';
+  })
+}
+
+formEditAvatar.addEventListener("submit", submitAddNewAvatar);
+
+function updateProfile(profile) {
+  data.profileName.textContent = profile.name;
+  data.profileDescription.textContent = profile.about;
+  data.avatar.style.backgroundImage = `url(${profile.avatar})`;
+}

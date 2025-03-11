@@ -1,3 +1,5 @@
+import {openPopup } from "./modal";
+
 export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
   const cardTemplate = document.querySelector('#card-template').content;
   const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
@@ -18,11 +20,9 @@ export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
   return cardItem;
 }
 
-export function deleteCard (card) {
-  card.remove();
+export function likeCard(evt, likes, likeBtn) {
+  likes.textContent = evt.likes.length;
+  likeBtn.target.classList.toggle("card__like-button_is-active");//вкл. выкл. класса
 }
 
-export function likeCard(evt) {
-  evt.target.classList.toggle("card__like-button_is-active");//вкл. выкл. класса
-}
-
+//ппосчитать лайки
