@@ -45,6 +45,7 @@ const nameInput = formEditProfile.querySelector(".popup__input_type_name");
 const descrInput = formEditProfile.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescr = document.querySelector(".profile__description");
+const profileEditSubmitButton =formEditProfile.querySelector(".popup__button")
 const descrInputValue = descrInput.value;
 const nameInputValue = nameInput.value;
 
@@ -61,9 +62,20 @@ function sudmitProfileForm(evt) {
   profileTitle.textContent = nameInputValue;
   profileDescr.textContent = descrInputValue;
 
+  profileEditSubmitButton.textContent= 'Сохранение...'
+  
+  editProfile(nameInputValue, descrInputValue)
+  .then((res) => {
+    updateProfile(res);
+    closePopup(profileEditPopup);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+  .finally(() => {
+    profileEditSubmitButton.textContent = 'Сохранить';
+  })
   formEditProfile.reset();
-
-  closePopup(profileEditPopup, closePopupByEsc);//закпыть поп
 }
 
 formEditProfile.addEventListener('submit', sudmitProfileForm);
@@ -155,7 +167,7 @@ function submitAddNewAvatar (evt) {
   
   editProfileAvatar(link)
   .then((res) => {
-    data.avatar.style.backgroundImage = `url(${res.avatar})`
+    res.avatar.style.backgroundImage = `url(${res.avatar})`
     closePopup(newAvatarPopup);
     formEditAvatar.reset();
     clearError(formEditAvatar, validationConfig);
@@ -165,7 +177,7 @@ function submitAddNewAvatar (evt) {
     console.log(err);//куда блин выводить ошибки
   })
   .finally(() => {
-    data.avatarConfirmBtn.textContent = 'Обновить';
+    submitNewAvatarButton.textContent = 'Обновить';
   })
 }
 
@@ -174,5 +186,5 @@ formEditAvatar.addEventListener("submit", submitAddNewAvatar);
 function updateProfile(profile) {
   data.profileName.textContent = profile.name;
   data.profileDescription.textContent = profile.about;
-  data.avatar.style.backgroundImage = `url(${profile.avatar})`;
+  //data.avatar.style.backgroundImage = `url(${profile.avatar})`;
 }
