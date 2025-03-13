@@ -17,7 +17,9 @@ export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
 
   return cardItem;
 }
-
+export function deleteCard(cardElement) { 
+  cardElement.remove();
+}
 export function likeCard(evt, likes, likeBtn) {
   likes.textContent = evt.likes.length;
   likeBtn.target.classList.toggle("card__like-button_is-active");//вкл. выкл. класса

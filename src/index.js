@@ -1,6 +1,6 @@
 import './pages/index.css';
 import {initialCards} from "./cards.js";
-import { createCard, likeCard } from "./components/card.js";
+import { createCard,deleteCard, likeCard } from "./components/card.js";
 import { openPopup, closePopup, closePopupByOverlay,closePopupByEsc } from "./components/modal.js";
 import {enableValidation, clearError} from "./validation.js";
 import {getProfile,editProfile,addNewCard,removeCard,likeCardA,unlikeCardA,editProfileAvatar} from "./api.js";
@@ -17,7 +17,7 @@ const validationConfig = {
 }
 
 initialCards.forEach((el) => {    
-  cardsContainer.append(createCard(el, deleteCard,likeCard,handleclickImage));
+  cardsContainer.append(createCard(el, handledeleteCard,likeCard,handleclickImage));
 });
 
 const popupConteiners = document.querySelectorAll('.popup');
@@ -58,12 +58,13 @@ profileEditButton.addEventListener("click", () => {
 //отправка формы + обработчик отправики
 function sudmitProfileForm(evt) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  
+  const descrInputValue = descrInput.value;
+  const nameInputValue = nameInput.value;
   profileTitle.textContent = nameInputValue;
   profileDescr.textContent = descrInputValue;
 
   profileEditSubmitButton.textContent= 'Сохранение...'
-  
+
   editProfile(nameInputValue, descrInputValue)
   .then((res) => {
     updateProfile(res);
@@ -91,20 +92,19 @@ const formDeleteCard= document.querySelector('.form__delete-card');
 const yesDeleteButton = deleteCardPopup.querySelector('.popup__button');
 
 //удаляем карточку
-function deleteCard (card, cardElement) {
+function handledeleteCard (evt,card, cardElement) {
+  evt.preventDefault();  
   openPopup(deleteCardPopup, closePopupByEsc)
-  yesDeleteButton.addEventListener("click",()=>
   removeCard(card._id)
   .then((res) => {
-    cardElement.remove();
+    deleteCard(cardElement);
     closePopup(deleteCardPopup)
   })
   .catch((err) => {
     console.log(err);
   })
-)
 }
-formDeleteCard.addEventListener("submit", deleteCard)
+formDeleteCard.addEventListener("submit", handledeleteCard)
 
 
 //лайк карточки))
@@ -122,7 +122,7 @@ function submitAddNewCardForm(evt) {
     link: linkInput.value,
   };
   cardsContainer.prepend(
-    createCard(newCardObj,deleteCard,likeCard,handleclickImage
+    createCard(newCardObj,handledeleteCard,likeCard,handleclickImage
     )
   );
 
