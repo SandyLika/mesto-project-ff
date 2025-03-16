@@ -1,6 +1,6 @@
 import './pages/index.css';
 import {initialCards} from "./cards.js";
-import { createCard,deleteCard, likeCard } from "./components/card.js";
+import { createCard,deleteCard, statusIsLiked, likeCount } from "./components/card.js";
 import { openPopup, closePopup, closePopupByOverlay,closePopupByEsc } from "./components/modal.js";
 import {enableValidation, clearError} from "./validation.js";
 import {getProfile,editProfile,addNewCard,removeCard,likeCardA,unlikeCardA,editProfileAvatar} from "./api.js";
@@ -17,7 +17,7 @@ const validationConfig = {
 }
 
 initialCards.forEach((el) => {    
-  cardsContainer.append(createCard(el, handledeleteCard,likeCard,handleclickImage));
+  cardsContainer.append(createCard(el, openDeleteCardPopup,handleClickLike,handleclickImage));
 });
 
 const popupConteiners = document.querySelectorAll('.popup');
@@ -68,7 +68,7 @@ function sudmitProfileForm(evt) {
   editProfile(nameInputValue, descrInputValue)
   .then((res) => {
     updateProfile(res);
-    closePopup(profileEditPopup);
+    closePopup(profileEditPopup, closePopupByEsc);
   })
   .catch((err) => {
     console.log(err);
@@ -91,23 +91,52 @@ const deleteCardPopup = document.querySelector('.popup_type_delete-card');
 const formDeleteCard= document.querySelector('.form__delete-card');
 const yesDeleteButton = deleteCardPopup.querySelector('.popup__button');
 
+let cardElementDelete = null;
+let cardElementIdDelete = null;
+
+function openDeleteCardPopup(cardElement, cardId) {
+  cardElementDelete = cardElement;
+  cardElementIdDelete = cardId;
+  openPopup(deleteCardPopup, closePopupByEsc);
+}
 //удаляем карточку
-function handledeleteCard (evt,card, cardElement) {
+function submitDeleteCard (evt) {
   evt.preventDefault();  
-  openPopup(deleteCardPopup, closePopupByEsc)
-  removeCard(card._id)
-  .then((res) => {
-    deleteCard(cardElement);
-    closePopup(deleteCardPopup)
+  
+  removeCard(cardElementIdDelete)
+  .then(() => {
+    deleteCard(cardElementDelete);
+    closePopup(deleteCardPopup, closePopupByEsc);
   })
   .catch((err) => {
     console.log(err);
   })
 }
-formDeleteCard.addEventListener("submit", handledeleteCard)
+formDeleteCard.addEventListener("submit", submitDeleteCard)
 
 
 //лайк карточки))
+function handleClickLike (card, likesCount, likeButton) {
+  if (statusIsLiked) {
+    unlikeCardA(card._id)
+    .then ((res) => {
+      likeCount(res,likesCount, likeButton)
+    })
+    .catch ((err) => {
+      console.log(err);
+    })
+  }
+  else {
+    likeCardA (card._id)
+    .then ((res) => {
+      likeCount(res,likesCount, likeButton)
+    })
+    .catch ((err) => {
+      console.log(err);
+    })
+  }
+
+}
 // обработчик клика для созд. новой карточки :)
 addNewCardButton.addEventListener("click", () =>
   openPopup(addNewCardPopup, closePopupByEsc)
@@ -122,8 +151,7 @@ function submitAddNewCardForm(evt) {
     link: linkInput.value,
   };
   cardsContainer.prepend(
-    createCard(newCardObj,handledeleteCard,likeCard,handleclickImage
-    )
+    createCard(newCardObj,openDeleteCardPopup,handleClickLike,handleclickImage)
   );
 
   formAddNewCard.reset();//сброс значений из формы

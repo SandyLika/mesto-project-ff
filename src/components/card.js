@@ -3,9 +3,11 @@ export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
   const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardItem.querySelector('.card__image');
   const cardTitle = cardItem.querySelector('.card__title');
+  const likesCount =  cardItem.querySelector('.card__like-num');
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
+  cardItem.querySelector(".card__like-count").textContent = card.likes.length;
 
   const deleteButton = cardItem.querySelector('.card__delete-button');
   deleteButton.addEventListener('click',() => deleteCB(cardItem));
@@ -20,9 +22,17 @@ export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
 export function deleteCard(cardElement) { 
   cardElement.remove();
 }
-export function likeCard(evt, likes, likeBtn) {
-  likes.textContent = evt.likes.length;
-  likeBtn.target.classList.toggle("card__like-button_is-active");//вкл. выкл. класса
+
+export function statusIsLiked(likeButton) {
+  let status = false;
+  if(likeButton.classList.contains('card__like-button_is-active')){
+    status = true;
+  }
+  return status;
 }
 
-//ппосчитать лайки
+export function likeCount(res,likeButton, likesCount) {
+  likesCount.textContent = res.likes.length;
+  likeButton.classList.toggle('card__like-button_is-active');
+}
+

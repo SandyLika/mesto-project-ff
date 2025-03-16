@@ -12,7 +12,7 @@ const getInitialCards = () => {
     method: 'GET',
     headers: config.headers
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 //3. берем профиль
 const getProfile = () => {
@@ -20,7 +20,7 @@ const getProfile = () => {
     method: 'GET',
     headers: config.headers
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 //5.обновляем профиль
 const editProfile = (name, about) => {
@@ -32,7 +32,7 @@ const editProfile = (name, about) => {
       about: about
     })
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 //6. Добавляем новую карточку
 const addNewCard= (name, link) => {
@@ -44,7 +44,7 @@ const addNewCard= (name, link) => {
       link: link
     })
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 
 // 8. удалить крточки пользователя
@@ -53,7 +53,7 @@ const removeCard = (cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 
 // 9.лайк карточки,A - API
@@ -62,7 +62,7 @@ const likeCardA = (cardId) => {
     method: 'PUT',
     headers: config.headers
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 
 // 9.анлайк карточки ,A - API
@@ -71,7 +71,7 @@ const unlikeCardA = (cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 
 // 10. обновляем аватар
@@ -83,7 +83,7 @@ const editProfileAvatar = (link) => {
       avatar: link
     })
   })
-  .then((res) => checkResponse(res))
+  .then(checkResponse)
 }
 
 //проверяем что ответик.ок
