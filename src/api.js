@@ -35,14 +35,11 @@ const editProfile = (name, about) => {
   .then(checkResponse)
 }
 //6. Добавляем новую карточку
-const addNewCard= (name, link) => {
+const addNewCard= (data) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
-    body: JSON.stringify({
-      name: name,
-      link: link
-    })
+    body: JSON.stringify(data)
   })
   .then(checkResponse)
 }
@@ -95,6 +92,7 @@ function checkResponse(res) {
 }
 
 export {
+  getInitialCards,
   getProfile,
   editProfile,
   addNewCard,

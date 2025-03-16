@@ -1,4 +1,4 @@
-export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
+export function createCard (card,userId,openDeleteCardPopup, likeCB, imgCB) { //CB-CallBack
   const cardTemplate = document.querySelector('#card-template').content;
   const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardItem.querySelector('.card__image');
@@ -10,7 +10,17 @@ export function createCard (card, deleteCB, likeCB, imgCB) { //CB-CallBack
   cardItem.querySelector(".card__like-count").textContent = card.likes.length;
 
   const deleteButton = cardItem.querySelector('.card__delete-button');
-  deleteButton.addEventListener('click',() => deleteCB(cardItem));
+  //deleteButton.addEventListener('click',() => deleteCB(cardItem));
+
+  //пользователь удалет только свои карточки
+  if (card.owner._id !== userId) {
+    cardItem.querySelector(".card__delete-button").remove();
+  } 
+  else {
+      deleteButton.addEventListener("click", () => {
+      openDeleteCardPopup(cardItem, card._id);
+    });
+  }
 
   const likeButton = cardItem.querySelector(".card__like-button");
   likeButton.addEventListener("click", likeCB);
