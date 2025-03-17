@@ -7,7 +7,7 @@ export function createCard (card,userId,openDeleteCardPopup, likeCB, imgCB) { //
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
-  cardItem.querySelector(".card__like-count").textContent = card.likes.length;
+  likesCount.textContent = card.likes.length;
 
   const deleteButton = cardItem.querySelector('.card__delete-button');
   //deleteButton.addEventListener('click',() => deleteCB(cardItem));

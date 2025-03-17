@@ -30,7 +30,7 @@ const checkInputValidity = (formElement, inputElement, validationConfig) => {
 
 //добавлние слушателй всем формам
 const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll('.form__input'));
+  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
   const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector)
   //переключить кнопку
   toggleButtonState(inputList, buttonElement);
@@ -62,11 +62,11 @@ function hasInvalidInput(inputList) {
 //переключатель доступности кнопки
 function toggelButtonState (inputList, buttonElement, validationConfig) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(validationConfig.inactiveButtonClass)
+    buttonElement.classList.add("popup__button_disabled")//validationConfig.inaktiveButtonClass dont work((
     buttonElement.setAttribute('aria-disabled', 'true')
   }
   else {
-    buttonElement.classList.remove(validationConfig.inactiveButtonClass)
+    buttonElement.classList.remove("popup__button_disabled")
     buttonElement.setAttribute('aria-disabled', 'false')
   }
 }
@@ -79,5 +79,5 @@ export function clearError (formElement,validationConfig) {
     toggelButtonState(inputList, buttonElement, validationConfig)
     hideInputError(formElement, inputElement, validationConfig);
   });
-  toggleButtonState(inputList, buttonElement);
+  toggelButtonState(inputList, buttonElement);
 }

@@ -11,9 +11,9 @@ const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
-  inactiveButtonClass: ".popup__button_disabled",
-  inputErrorClass: ".popup__input_type_error",
-  errorClass: ".popup__error_visible"
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible"
 }
 let userId = '';
 Promise.all([getProfile(), getInitialCards()])
@@ -55,8 +55,8 @@ const descrInput = formEditProfile.querySelector(".popup__input_type_description
 const profileTitle = document.querySelector(".profile__title");
 const profileDescr = document.querySelector(".profile__description");
 const profileEditSubmitButton =formEditProfile.querySelector(".popup__button")
-const descrInputValue = descrInput.value;
-const nameInputValue = nameInput.value;
+// const descrInputValue = descrInput.value;
+// const nameInputValue = nameInput.value;
 
 //обработчик клика кнопки для ред. профиля :)
 profileEditButton.addEventListener("click", () => {
@@ -69,15 +69,18 @@ function sudmitProfileForm(evt) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   const descrInputValue = descrInput.value;
   const nameInputValue = nameInput.value;
-  profileTitle.textContent = nameInputValue;
-  profileDescr.textContent = descrInputValue;
+  // profileTitle.textContent = nameInputValue;
+  // profileDescr.textContent = descrInputValue;
 
   profileEditSubmitButton.textContent= 'Сохранение...'
 
   editProfile(nameInputValue, descrInputValue)
   .then((res) => {
+    profileTitle.textContent = nameInputValue;
+    profileDescr.textContent = descrInputValue;
     updateProfile(res);
-    closePopup(profileEditPopup, closePopupByEsc);
+    closePopup(profileEditPopup);
+    formEditProfile.reset();
   })
   .catch((err) => {
     console.log(err);
@@ -85,7 +88,6 @@ function sudmitProfileForm(evt) {
   .finally(() => {
     profileEditSubmitButton.textContent = 'Сохранить';
   })
-  formEditProfile.reset();
 }
 
 formEditProfile.addEventListener('submit', sudmitProfileForm);
@@ -116,7 +118,7 @@ function submitDeleteCard (evt) {
   removeCard(cardElementIdDelete)
   .then(() => {
     deleteCard(cardElementDelete);
-    closePopup(deleteCardPopup, closePopupByEsc);
+    closePopup(deleteCardPopup);
   })
   .catch((err) => {
     console.log(err);
@@ -126,8 +128,8 @@ formDeleteCard.addEventListener("submit", submitDeleteCard)
 
 
 //лайк карточки))
-function handleClickLike (card, likesCount, likeButton) {
-  if (statusIsLiked) {
+function handleClickLike (card, likesCount, likeButton, status) {
+  if (status) {
     unlikeCardA(card._id)
     .then ((res) => {
       likeCount(res,likesCount, likeButton)
@@ -137,7 +139,7 @@ function handleClickLike (card, likesCount, likeButton) {
     })
   }
   else {
-    likeCardA (card._id)
+    likeCardA(card._id)
     .then ((res) => {
       likeCount(res,likesCount, likeButton)
     })
@@ -166,9 +168,9 @@ function submitAddNewCardForm(evt) {
   addNewCard(newCardObj)
   .then ((res) => {
     cardsContainer.prepend(createCard(res, userId, openDeleteCardPopup, handleClickLike, handleclickImage))
-    closePopup(addNewCardPopup, closePopupByEsc);
+    closePopup(addNewCardPopup);
     formAddNewCard.reset();
-    clearValidation(formAddNewCard, validationConfig); 
+    clearError(formAddNewCard, validationConfig); 
   })
   .catch((err) => {
     console.log(err);
@@ -215,7 +217,7 @@ function submitAddNewAvatar (evt) {
   
   editProfileAvatar(link)
   .then((res) => {
-    res.avatar.style.backgroundImage = `url(${res.avatar})`
+    // res.avatar.style.backgroundImage = `url(${res.avatar})`
     closePopup(newAvatarPopup);
     formEditAvatar.reset();
     clearError(formEditAvatar, validationConfig);
