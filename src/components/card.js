@@ -23,7 +23,9 @@ export function createCard (card,userId,openDeleteCardPopup, likeCB, imgCB) { //
   }
 
   const likeButton = cardItem.querySelector(".card__like-button");
-  likeButton.addEventListener("click", likeCB);
+  likeButton.addEventListener("click", () => {
+    likeCB(card, likesCount, likeButton, status)
+  });
 
   cardImage.addEventListener("click", imgCB);
 
