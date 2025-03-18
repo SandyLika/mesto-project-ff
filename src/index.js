@@ -15,6 +15,7 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible"
 }
+
 let userId = '';
 Promise.all([getProfile(), getInitialCards()])
   .then(([profile, cards]) => {
@@ -39,9 +40,9 @@ popupConteiners.forEach(function (el) {
   el.addEventListener("click", closePopupByOverlay);
 });
 
-popupConteiners.forEach(function (el) {
-  el.addEventListener("click", closePopupByEsc);
-});
+// popupConteiners.forEach(function (el) {
+//   el.addEventListener("click", closePopupByEsc);
+// });
 
 const profileEditButton = document.querySelector(".profile__edit-button");//Кнопка редактирования профиля
 const addNewCardButton = document.querySelector(".profile__add-button");//кнопка создания новой карточки
@@ -49,7 +50,7 @@ const profileEditPopup = document.querySelector(".popup_type_edit");// попа�
 const addNewCardPopup = document.querySelector(".popup_type_new-card");// попап для созд. новой карточки
 
 //все про форму редактирования профиля
-const formEditProfile = document.querySelector(".popup__form");
+const formEditProfile = document.querySelector(".form__edit-profile");
 const nameInput = formEditProfile.querySelector(".popup__input_type_name");
 const descrInput = formEditProfile.querySelector(".popup__input_type_description");
 const profileTitle = document.querySelector(".profile__title");
@@ -81,6 +82,7 @@ function sudmitProfileForm(evt) {
     updateProfile(res);
     closePopup(profileEditPopup);
     formEditProfile.reset();
+    clearError(formEditProfile, validationConfig)
   })
   .catch((err) => {
     console.log(err);
@@ -132,7 +134,7 @@ function handleClickLike (card, likesCount, likeButton, status) {
   if (status) {
     unlikeCardA(card._id)
     .then ((res) => {
-      likeCount(res,likesCount, likeButton)
+      likeCount(res, likeButton,likesCount)
     })
     .catch ((err) => {
       console.log(err);
@@ -141,7 +143,7 @@ function handleClickLike (card, likesCount, likeButton, status) {
   else {
     likeCardA(card._id)
     .then ((res) => {
-      likeCount(res,likesCount, likeButton)
+      likeCount(res, likeButton,likesCount)
     })
     .catch ((err) => {
       console.log(err);

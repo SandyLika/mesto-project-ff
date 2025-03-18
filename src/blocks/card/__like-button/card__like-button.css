@@ -17,7 +17,7 @@
 
 .card__like-button:hover {
   opacity: 0.6;
-}
+} 
 
 .card__like {
   display: flex;
@@ -28,4 +28,6 @@
 
 .card__like-num {
   font-size: 13px;
+  line-height: 100%;
+  text-align: center;
 }
