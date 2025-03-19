@@ -22,7 +22,6 @@ const checkInputValidity = (formElement, inputElement, validationConfig) => {
   }
   
   if (!inputElement.validity.valid) {
-    console.log(inputElement);
     showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
   } else {
     hideInputError(formElement, inputElement, validationConfig);
@@ -47,10 +46,10 @@ const setEventListeners = (formElement, validationConfig) => {
 export const enableValidation = (validationConfig) => {
   const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
   formList.forEach((formElement) => {
-    formElement.addEventListener('submit', function () {
+    formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
-    setEventListeners(formElement, validationConfig)
+    setEventListeners(formElement, validationConfig);
   });
 };
 //enableValidation()
@@ -67,7 +66,7 @@ function toggelButtonState (inputList, buttonElement,validationConfig) {
     buttonElement.setAttribute('aria-disabled', 'true')
   }
   else {
-    buttonElement.classList.remove("popup__button_disabled")
+    buttonElement.classList.remove(validationConfig.inactiveButtonClass)
     buttonElement.setAttribute('aria-disabled', 'false')
   }
 }

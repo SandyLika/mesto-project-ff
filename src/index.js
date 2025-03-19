@@ -81,7 +81,6 @@ function sudmitProfileForm(evt) {
     profileDescr.textContent = descrInputValue;
     updateProfile(res);
     closePopup(profileEditPopup);
-    formEditProfile.reset();
     clearError(formEditProfile, validationConfig)
   })
   .catch((err) => {
@@ -171,7 +170,6 @@ function submitAddNewCardForm(evt) {
   .then ((res) => {
     cardsContainer.prepend(createCard(res, userId, openDeleteCardPopup, handleClickLike, handleclickImage))
     closePopup(addNewCardPopup);
-    formAddNewCard.reset();
     clearError(formAddNewCard, validationConfig); 
   })
   .catch((err) => {
